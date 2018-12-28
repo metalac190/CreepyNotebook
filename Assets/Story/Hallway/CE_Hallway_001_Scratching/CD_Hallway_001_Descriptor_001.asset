@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f25e0c8c4026bf41bc774f693302095, type: 3}
+  m_Name: CD_Hallway_001_Descriptor_001
+  m_EditorClassIdentifier: 
+  storyRequirement:
+    requiredStat: 0
+    requiredStatLevel: 0
+    requiredKey: 
+  choiceText: I turned on the flashlight...
+  difficulty: 0
+  sucessOutcome: {fileID: 0}
+  failureOutcome: {fileID: 0}
