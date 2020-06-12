@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoryTextDisplayView : MonoBehaviour
+public interface IProgressable
 {
-
+    void Progress();
+    bool CanProgress();
 }

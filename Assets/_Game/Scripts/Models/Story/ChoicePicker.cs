@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChoiceController : MonoBehaviour
+public class ChoicePicker
 {
-    public void Choose()
-    {
-
-    }
+    
 }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoryChoiceState : IState
+public class StoryIdleState : IState
 {
     private StorySM _stateMachine = null;
 
-    public StoryChoiceState(StorySM stateMachine)
+    public StoryIdleState(StorySM stateMachine)
     {
         _stateMachine = stateMachine;
     }

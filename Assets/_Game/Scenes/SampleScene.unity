@@ -493,7 +493,7 @@ GameObject:
   - component: {fileID: 522593050}
   - component: {fileID: 522593051}
   m_Layer: 5
-  m_Name: ChoiceDisplay_pnl
+  m_Name: DecisionDisplay_pnl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -732,9 +732,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 572740905}
-  - component: {fileID: 572740908}
-  - component: {fileID: 572740907}
   - component: {fileID: 572740906}
+  - component: {fileID: 572740908}
   m_Layer: 0
   m_Name: StoryController
   m_TagString: Untagged
@@ -770,18 +769,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _input: {fileID: 827302953}
   _story: {fileID: 572740908}
---- !u!114 &572740907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 572740904}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d7980d860d614e42b1070a81c402b86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _display: {fileID: 0}
 --- !u!114 &572740908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -794,6 +782,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c64fd4f976520439a861f73cd34947, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stats: {fileID: 1001137874}
+  _inventory: {fileID: 1001137875}
+  _startingStoryEvent: {fileID: 0}
 --- !u!1 &762341533
 GameObject:
   m_ObjectHideFlags: 0
@@ -2458,7 +2449,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26247a4fe0411f0479239c024947d201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _storyTextDisplayView: {fileID: 0}
+  _storyTextView: {fileID: 0}
+  _storyDecisionView: {fileID: 522593051}
+  _storyImageView: {fileID: 762341535}
 --- !u!114 &1669629402
 MonoBehaviour:
   m_ObjectHideFlags: 0
