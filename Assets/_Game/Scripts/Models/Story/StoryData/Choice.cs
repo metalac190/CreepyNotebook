@@ -16,4 +16,11 @@ public class Choice : ScriptableObject
 
     [SerializeField] StoryEvent _failureOutcome = null;
     public StoryEvent FailureOutcome => _failureOutcome;
+
+    public StoryEvent StoryEventResult { get; private set; }
+
+    public void SetResult(StoryEvent storyEvent)
+    {
+        StoryEventResult = storyEvent;
+    }
 }

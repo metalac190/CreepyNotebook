@@ -6,13 +6,11 @@ public class StoryRevealState : IState
 {
     StorySM _stateMachine = null;
     InputController _input = null;
-    StoryEventController _story = null;
+    StoryController _story = null;
     StoryDisplayController _display = null;
 
-    bool _isStartingStoryEvent = true;
-
     public StoryRevealState(StorySM stateMachine, InputController input, 
-        StoryEventController story, StoryDisplayController display)
+        StoryController story, StoryDisplayController display)
     {
         _stateMachine = stateMachine;
         _input = input;
@@ -23,18 +21,17 @@ public class StoryRevealState : IState
     public void Enter()
     {
         Debug.Log("STORY: Display");
+        // subscribe
         _input.OnClicked += HandleClicked;
         StoryDisplayController.OnProgressionComplete += HandleStoryRevealCompleted;
-        // if this is our starting point, use that, otherwise progress
-        if (!_isStartingStoryEvent)
-        {
-            _story.StartNewStoryEvent();
-        }
-        
+        // handle story
+        _story.ProgressStory();
+        _display.ProgressDisplay(_story.CurrentStoryEvent);
     }
 
     public void Exit()
     {
+        // unsubscribe
         _input.OnClicked -= HandleClicked;
         StoryDisplayController.OnProgressionComplete -= HandleStoryRevealCompleted;
     }
@@ -51,6 +48,6 @@ public class StoryRevealState : IState
 
     void HandleStoryRevealCompleted()
     {
-        //
+        _stateMachine.ChangeState(_stateMachine.StoryIdleState);
     }
 }

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewStoryImage", menuName = "Story/Image")]
+[CreateAssetMenu(fileName = "NewStoryImage", menuName = "StoryEvent/Image")]
 public class StoryImage : StoryEvent
 {
+    [Header("Story Image Settings")]
     [SerializeField] Sprite _image = null;
     public Sprite Image => _image;
 

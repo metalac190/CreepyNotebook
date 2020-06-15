@@ -325,6 +325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 402434915}
   - component: {fileID: 402434916}
+  - component: {fileID: 402434917}
   m_Layer: 5
   m_Name: StoryTextDisplay_pnl
   m_TagString: Untagged
@@ -363,6 +364,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d31761854b474489e6af7de74d27d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textView: {fileID: 0}
+--- !u!114 &402434917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402434914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdff7bec22b5f2246bbad2b8a6ddecd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &421614635
@@ -770,6 +784,8 @@ MonoBehaviour:
   _input: {fileID: 827302953}
   _story: {fileID: 572740908}
   _display: {fileID: 0}
+  _stats: {fileID: 0}
+  _inventory: {fileID: 0}
 --- !u!114 &572740908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -782,8 +798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c64fd4f976520439a861f73cd34947, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stats: {fileID: 1001137874}
-  _inventory: {fileID: 1001137875}
+  _storyTextController: {fileID: 0}
   _startingStoryEvent: {fileID: 0}
 --- !u!1 &762341533
 GameObject:
@@ -2429,7 +2444,6 @@ GameObject:
   - component: {fileID: 1669629404}
   - component: {fileID: 1669629403}
   - component: {fileID: 1669629402}
-  - component: {fileID: 1669629399}
   m_Layer: 5
   m_Name: Story_cnv
   m_TagString: Untagged
@@ -2437,21 +2451,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1669629399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1669629398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26247a4fe0411f0479239c024947d201, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _storyTextView: {fileID: 0}
-  _storyDecisionView: {fileID: 522593051}
-  _storyImageView: {fileID: 762341535}
 --- !u!114 &1669629402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2992,6 +2991,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textUI: {fileID: 1195422332}
+  <CurrentText>k__BackingField: 
+  revealText: {fileID: 0}
+  revealChoices: {fileID: 0}
+  gameController: {fileID: 0}
 --- !u!114 &1738897819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3012,6 +3015,7 @@ MonoBehaviour:
   hideSpeed: 0.15
   showDelayIncrement: 0.15
   hideDelayIncrement: 0.05
+  gameController: {fileID: 0}
 --- !u!1 &1769182037
 GameObject:
   m_ObjectHideFlags: 0
@@ -3457,6 +3461,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1941001399}
+  - component: {fileID: 1941001400}
   m_Layer: 0
   m_Name: StoryUI
   m_TagString: Untagged
@@ -3479,6 +3484,22 @@ Transform:
   m_Father: {fileID: 536551634}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1941001400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941001398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26247a4fe0411f0479239c024947d201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _story: {fileID: 0}
+  _storyTextView: {fileID: 402434916}
+  _storyDecisionView: {fileID: 522593051}
+  _storyImageView: {fileID: 762341535}
 --- !u!1 &1963959750
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,32 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class StoryTextView : MonoBehaviour
 {
-    StoryText _storyText = null;
-    int _currentTextBlockIndex = 0;
+    [SerializeField] TextMeshProUGUI _textView = null;
 
-    public bool CanProgress()
-    {
-        int targetIndex = _currentTextBlockIndex + 1;
-        if(_storyText.TextBlock[targetIndex] != null)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public void Display(StoryText storyText)
+    public void Display(TextBlock textBlock)
     {
         Debug.Log("Display Story Text");
-    }
-
-    public void Progress()
-    {
-        throw new System.NotImplementedException();
+        _textView.text = textBlock.StoryText;
     }
 }

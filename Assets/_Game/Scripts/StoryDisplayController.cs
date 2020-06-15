@@ -8,18 +8,19 @@ public class StoryDisplayController : MonoBehaviour
     public static event Action OnProgressionComplete = delegate { };
     public static event Action OnStoryEventDisplayComplete = delegate { };
 
+    [SerializeField] StoryController _story = null;
     [SerializeField] StoryTextView _storyTextView = null;
     [SerializeField] StoryDecisionView _storyDecisionView = null;
     [SerializeField] StoryImageView _storyImageView = null;
 
     private void OnEnable()
     {
-        StorySM.OnNewStoryEvent += HandleNewStoryEvent;
+        //_story.OnStartedNewStoryEvent += HandleNewStoryEvent;
     }
 
     private void OnDisable()
     {
-        StorySM.OnNewStoryEvent -= HandleNewStoryEvent;
+        //_story.OnStartedNewStoryEvent -= HandleNewStoryEvent;
     }
 
     public void CompleteReveal()
@@ -27,28 +28,24 @@ public class StoryDisplayController : MonoBehaviour
         //TODO finish revealing the current progression
     }
 
-    public void DisplayStoryEvent(StoryEvent storyEvent)
+    public void ProgressDisplay(StoryEvent storyEvent)
     {
         if(storyEvent is StoryText)
         {
-            _storyTextView.Display(storyEvent as StoryText);
+            //_storyTextView.ProgressDisplay(storyEvent as StoryText);
         }
         else if(storyEvent is StoryDecision)
         {
-            _storyDecisionView.Display(storyEvent as StoryDecision);
+            _storyDecisionView.ProgressDisplay(storyEvent as StoryDecision);
         }
         else if (storyEvent is StoryImage)
         {
-            //_storyImageView.Display(storyEvent as StoryImage);
-        }
-        else if(storyEvent is StoryEnd)
-        {
-            //TODO
+            _storyImageView.ProgressDisplay(storyEvent as StoryImage);
         }
     }
 
     void HandleNewStoryEvent(StoryEvent newStoryEvent)
     {
-        DisplayStoryEvent(newStoryEvent);
+        ProgressDisplay(newStoryEvent);
     }
 }
