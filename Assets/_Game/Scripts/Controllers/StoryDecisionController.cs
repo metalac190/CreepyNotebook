@@ -1,17 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoryDecisionController : MonoBehaviour
+public class StoryDecisionController : StoryEventController
 {
-    // Start is called before the first frame update
-    void Start()
+    public override event Action<StoryEventData> EventEnded;
+
+    public void Begin()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Progress()
     {
         
     }

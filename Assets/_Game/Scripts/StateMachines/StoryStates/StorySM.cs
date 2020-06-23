@@ -6,29 +6,25 @@ using System;
 public class StorySM : StateMachine
 {
     [Header("Dependencies")]
-    [SerializeField] InputController _input = null;
-    [SerializeField] StoryController _story = null;
-    [SerializeField] StoryDisplayController _display = null;
-    // player settings
-    [Header("Player Settings")]
-    [SerializeField] PlayerStats _stats = null;
-    [SerializeField] Inventory _inventory = null;
+    [SerializeField] InputManager _input = null;
+    [SerializeField] PlayerManager _player = null;
     // states
-    public StoryIntroState StoryIntroState { get; private set; }
-    public StoryRevealState StoryRevealState { get; private set; }
-    public StoryIdleState StoryIdleState { get; private set; }
-    public StoryExitState StoryExitState { get; private set; }
+    public StoryIntroState IntroState { get; private set; }
+    public StoryContentRevealState ContentRevealState { get; private set; }
+    public StoryContentIdleState ContentIdleState { get; private set; }
+    public StoryExitState ExitState { get; private set; }
 
     private void Awake()
     {
-        StoryIntroState = new StoryIntroState(this, _story, _stats, _inventory);
-        StoryRevealState = new StoryRevealState(this, _input, _story, _display);
-        StoryIdleState = new StoryIdleState(this, _input);
-        StoryExitState = new StoryExitState(this);
+        // initialize states
+        IntroState = new StoryIntroState(this, _player.Stats, _player.Inventory);
+        ExitState = new StoryExitState(this);
+        ContentRevealState = new StoryContentRevealState(this, _input);
+        ContentIdleState = new StoryContentIdleState(this, _input);
     }
 
     private void Start()
     {
-        ChangeState(StoryIntroState);
+        ChangeState(IntroState);
     }
 }

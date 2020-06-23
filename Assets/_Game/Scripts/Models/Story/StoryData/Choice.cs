@@ -2,25 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewChoice", menuName = "Story/Choice")]
-public class Choice : ScriptableObject
+[System.Serializable]
+public class Choice
 {
-    [SerializeField] string _choiceText = "...";
-    public string ChoiceText => _choiceText;
+    // choice that gets assigned to the button
+    [SerializeField] string _buttonText = null;
+    public string ButtonText => _buttonText;
 
     [SerializeField] Gate _gate = null;
     public Gate Gate => _gate;
 
-    [SerializeField] StoryEvent _successOutcome = null;
-    public StoryEvent SuccessOutcome => _successOutcome;
+    [SerializeField] ChoiceOutcome _choiceOutcome = null;
+    public ChoiceOutcome ChoiceOutcome => _choiceOutcome;
 
-    [SerializeField] StoryEvent _failureOutcome = null;
-    public StoryEvent FailureOutcome => _failureOutcome;
 
-    public StoryEvent StoryEventResult { get; private set; }
-
-    public void SetResult(StoryEvent storyEvent)
-    {
-        StoryEventResult = storyEvent;
-    }
 }

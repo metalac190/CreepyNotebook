@@ -5,10 +5,9 @@ using UnityEngine;
 public enum StatIdentifier
 {
     None = 0,
-    Health,
-    Sanity,
+    MaxHealth,
+    MaxSanity,
     Calm,
-    Tenacity,
-    Perception,
-    Survival
+    Survival,
+    Tenacity
 }

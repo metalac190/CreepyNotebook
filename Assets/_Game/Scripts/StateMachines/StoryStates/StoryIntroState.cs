@@ -5,22 +5,19 @@ using UnityEngine;
 public class StoryIntroState : IState
 {
     StorySM _stateMachine = null;
-    StoryController _story = null;
     Inventory _inventory = null;
     PlayerStats _stats = null;
 
-    public StoryIntroState(StorySM stateMachine, StoryController story, PlayerStats stats, Inventory inventory)
+    public StoryIntroState(StorySM stateMachine, PlayerStats stats, Inventory inventory)
     {
         _stateMachine = stateMachine;
-        _story = story;
         _inventory = inventory;
         _stats = stats;
     }
 
     public void Enter()
     {
-        Debug.Log("STORY: Intro State");
-        _story.Initialize();
+        Debug.Log("INTRO");
         
     }
 
@@ -31,6 +28,6 @@ public class StoryIntroState : IState
 
     public void Tick()
     {
-        _stateMachine.ChangeState(_stateMachine.StoryRevealState);
+        _stateMachine.ChangeState(_stateMachine.ContentRevealState);
     }
 }

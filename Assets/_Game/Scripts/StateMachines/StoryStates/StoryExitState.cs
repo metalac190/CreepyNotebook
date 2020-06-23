@@ -13,7 +13,7 @@ public class StoryExitState : IState
 
     public void Enter()
     {
-        Debug.Log("STORE: Exit State");
+        Debug.Log("EXIT");
     }
 
     public void Exit()
