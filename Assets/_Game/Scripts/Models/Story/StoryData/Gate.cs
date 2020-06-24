@@ -5,9 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class Gate
 {
-    // player resources
-    [SerializeField] int _healthReq = 0;
-    [SerializeField] int _sanityReq = 0;
     // player stats
     [SerializeField] int _calmReq = 0;
     [SerializeField] int _survivalReq = 0;

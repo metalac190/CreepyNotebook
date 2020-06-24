@@ -9,8 +9,8 @@ public class Choice
     [SerializeField] string _buttonText = null;
     public string ButtonText => _buttonText;
 
-    [SerializeField] Gate _gate = null;
-    public Gate Gate => _gate;
+    [SerializeField] int _statRequirement = 0;
+    public int StatRequirement => _statRequirement;
 
     [SerializeField] ChoiceOutcome _choiceOutcome = null;
     public ChoiceOutcome ChoiceOutcome => _choiceOutcome;

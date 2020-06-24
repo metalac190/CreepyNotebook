@@ -5,9 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class StoryExit
 {
-    [Header("Story Exit Settings")]
-
-    [SerializeField] StoryEventData[] _possibleExits;
+    [SerializeField] StoryEventData[] _possibleExits = null;
     public StoryEventData[] PossibleExits => _possibleExits;
 
     public virtual StoryEventData GetExit(PlayerStats stats, Inventory inventory)

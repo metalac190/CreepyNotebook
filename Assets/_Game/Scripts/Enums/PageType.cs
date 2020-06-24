@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDisplayable
+public enum PageType
 {
-    void Show();
-    void Hide();
+    Text,
+    Image
 }

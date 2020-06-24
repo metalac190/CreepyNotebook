@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 [RequireComponent(typeof(CanvasGroup))]
 [RequireComponent(typeof(Button))]
 public class ChoiceButton : MonoBehaviour, IDisplayable
 {
+    public event Action EnterCompleted;
+    public event Action ExitCompleted;
+
     [SerializeField] TextMeshProUGUI _textView = null;
     public string Text => _textView.text;
 
@@ -17,80 +21,41 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
     [SerializeField] float _showSpeedInSeconds = .2f;
     [SerializeField] float _hideSpeedInSeconds = .2f;
 
-    //public ChoiceData Choice { get; private set; }
-    public bool IsChoiceActive { get; private set; }
-
     float _startXPos = 0;
-    Button _buttonView = null;
-    Image _buttonImage;
+    Button _buttonUI = null;
+    Image _imageUI = null;
     CanvasGroup _canvasGroup = null;
     Coroutine _animationCoroutine = null;
 
     private void Awake()
     {
-        _buttonView = GetComponent<Button>();
-        _buttonImage = _buttonView.image;
+        // get references
+        _buttonUI = GetComponent<Button>();
+        _imageUI = _buttonUI.image;
         _canvasGroup = GetComponent<CanvasGroup>();
-
+        // set field defaults
         _startXPos = transform.localPosition.x;
-        _buttonImage.raycastTarget = false;
-        // enforce off default state, in case a designer has left it enabled
-        gameObject.SetActive(false);
+        _imageUI.raycastTarget = false;
     }
 
-    /*
-    public void Initialize(GameController gameController, RevealChoices revealChoices)
-    {
-        // inject
-        this.gameController = gameController;
-        this.revealChoices = revealChoices;
-        // local refs
-        canvasGroup = GetComponent<CanvasGroup>();
-        buttonImage = GetComponent<Image>();
-
-        startXPos = transform.localPosition.x;
-        buttonImage.raycastTarget = false;
-        // enforce off default state, in case a designer has left it enabled
-        gameObject.SetActive(false);
-    }
-    */
-
-    /*
-    public void PrepareNewChoice(ChoiceData choice)
-    {
-        // inject
-        this.Choice = choice;
-
-        SetupButton();
-        SetText(choice.ChoiceText);
-        SetChoiceActive(true);
-    }
-    */
-
-    //TODO
-    public void LoadNewChoice()
-    {
-        // load the choice
-        // setup the button
-        // set the text from choice
-        // enable choice clickable
-    }
-
-    void SetupButton()
+    public void SetupButton(Action actionOnClick)
     {
         // make sure we've disposed of our previous listeners
-        _buttonView.onClick.RemoveAllListeners();
-
-        //_buttonView.onClick.AddListener(delegate { gameController.ApplyChoice(Choice); });
-        //_buttonView.onClick.AddListener(revealChoices.DisableChoices);
+        _buttonUI.onClick.RemoveAllListeners();
+        _buttonUI.onClick.AddListener(delegate { actionOnClick.Invoke(); } );
     }
 
-    public void SetText(string newText)
+    public void Display(string buttonText)
     {
-        _textView.text = newText;
+        _textView.text = buttonText;
     }
 
-    IEnumerator AnimateShow(float startDelay, float showSpeedInSeconds)
+    public void Clear()
+    {
+        _textView.text = string.Empty;
+    }
+
+    IEnumerator AnimateEnter(float startDelay, float showSpeedInSeconds)
     {
         float currentAlpha = 0;
         _canvasGroup.alpha = 0;
@@ -115,14 +80,14 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         _canvasGroup.alpha = 1;
         transform.localPosition = new Vector2(animEndXPos, transform.localPosition.y);
         // only allow button to be clickable if animation has finished
-        _buttonImage.raycastTarget = true;
+        _imageUI.raycastTarget = true;
     }
 
-    IEnumerator AnimateHide(float startDelay, float hideSpeedInSeconds)
+    IEnumerator AnimateExit(float startDelay, float hideSpeedInSeconds)
     {
         float currentAlpha = 1;
         _canvasGroup.alpha = 1;
-        _buttonImage.raycastTarget = false;
+        _imageUI.raycastTarget = false;
 
         yield return new WaitForSeconds(startDelay);
 
@@ -138,14 +103,11 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         gameObject.SetActive(false);
     }
 
-    public void Display()
+    public void Show()
     {
-        // ensure our gameObject is active
-        gameObject.SetActive(true);
-
         if (_animationCoroutine != null)
             StopCoroutine(_animationCoroutine);
-        _animationCoroutine = StartCoroutine(AnimateShow(_startDelayInSeconds, _showSpeedInSeconds));
+        _animationCoroutine = StartCoroutine(AnimateEnter(_startDelayInSeconds, _showSpeedInSeconds));
     }
 
     public void Hide()
@@ -153,7 +115,7 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         // if we're currently animating, kill it early to start our new one
         if (_animationCoroutine != null)
             StopCoroutine(_animationCoroutine);
-        _animationCoroutine = StartCoroutine(AnimateHide(_startDelayInSeconds, _hideSpeedInSeconds));
+        _animationCoroutine = StartCoroutine(AnimateExit(_startDelayInSeconds, _hideSpeedInSeconds));
     }
 }
 

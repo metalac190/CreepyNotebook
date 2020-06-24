@@ -4,7 +4,6 @@ using UnityEngine;
 
 public enum ExitType
 {
-    Single,
-    Multiple,
-    Choice
+    Story,
+    Decision
 }

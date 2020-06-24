@@ -10,12 +10,21 @@ public class StoryEventData : ScriptableObject
     [SerializeField] string _name = "...";
     public string Name => _name;
 
+    [Header("Requirements")]
     [SerializeField] Gate _gate = null;
     public Gate Gate => _gate;
 
+    [Header("Story Pages")]
     [SerializeField] StoryPage[] _storyPages = null;
     public StoryPage[] StoryPages => _storyPages;
 
+    [Header("Exit Settings")]
+    [SerializeField] ExitType _exitType = ExitType.Story;
+    public ExitType ExitType => _exitType;
+
     [SerializeField] StoryExit _storyExit = null;
     public StoryExit StoryExit => _storyExit;
+
+    [SerializeField] StoryChoice _storyDecision = null;
+    public StoryChoice StoryDecision => _storyDecision;
 }

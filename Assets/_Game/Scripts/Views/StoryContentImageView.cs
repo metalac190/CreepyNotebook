@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class StoryContentImageView : MonoBehaviour
 {
+    public event Action CompletedShowAnimation;
+
     [SerializeField] Canvas _imageCanvas = null;
     [SerializeField] Image _imageUI = null;
     [SerializeField] TextMeshProUGUI _imageTextUI = null;
@@ -22,7 +25,7 @@ public class StoryContentImageView : MonoBehaviour
         _imageTextUI.text = string.Empty;
     }
 
-    public void Display(StoryImage storyImage)
+    public void Display(StoryPage storyImage)
     {
         _imageUI.sprite = null;
         _imageTextUI.text = string.Empty;
@@ -31,6 +34,13 @@ public class StoryContentImageView : MonoBehaviour
     public void Show()
     {
         _imageCanvas.gameObject.SetActive(true);
+        CompletedShowAnimation?.Invoke();
+    }
+
+    public void Complete()
+    {
+        _imageCanvas.gameObject.SetActive(true);
+        CompletedShowAnimation?.Invoke();
     }
 
     public void Hide()

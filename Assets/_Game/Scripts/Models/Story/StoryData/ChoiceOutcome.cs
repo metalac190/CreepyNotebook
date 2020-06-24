@@ -5,17 +5,20 @@ using UnityEngine;
 [System.Serializable]
 public class ChoiceOutcome
 {
-    [SerializeField] StoryPage _successText = null;
-    public StoryPage SuccessText => _successText;
+    public StoryPage[] ChosenStoryPages => _wasSuccessful ? _successText : _failureText;
+    public StoryExit[] ChosenStoryExits => _wasSuccessful ? _successExits : _failureExit;
 
-    [SerializeField] StoryExit _successExit = null;
-    public StoryExit SuccessExit => _successExit;
+    [SerializeField] int _difficulty = 0;
 
-    [SerializeField] StoryPage _failureText = null;
-    public StoryPage FailureText => _failureText;
+    [Header("Success")]
+    [SerializeField] StoryPage[] _successText = null;
+    [SerializeField] StoryExit[] _successExits = null;
 
-    [SerializeField] StoryExit _failureExit = null;
-    public StoryExit FailureExit => _failureExit;
+    [Header("Failure")]
+    [SerializeField] StoryPage[] _failureText = null;
+    [SerializeField] StoryExit[] _failureExit = null;
+
+    bool _wasSuccessful = false;
 
     public bool DetermineSuccess()
     {
@@ -23,10 +26,12 @@ public class ChoiceOutcome
         int randomNumber = UnityEngine.Random.Range(0, 100);
         if (randomNumber < 50)
         {
+            _wasSuccessful = true;
             return true;
         }
         else
         {
+            _wasSuccessful = false;
             return false;
         }
     }

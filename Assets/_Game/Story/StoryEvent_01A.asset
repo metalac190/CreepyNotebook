@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6798a50f568910046be6daa6e5ff7131, type: 3}
+  m_Name: StoryEvent_01A
+  m_EditorClassIdentifier: 
+  _name: Hallway
+  _gate:
+    _calmReq: 0
+    _survivalReq: 0
+    _tenacityReq: 0
+    _requiredItemID: 0
+  _storyPages:
+  - _pageType: 0
+    _text: Hallway Text A
+    _textSpeedModifier: 0
+    _graphic: {fileID: 0}
+  - _pageType: 0
+    _text: Hallway Text B
+    _textSpeedModifier: 0
+    _graphic: {fileID: 0}
+  _exitType: 0
+  _storyExit:
+    _possibleExits:
+    - {fileID: 11400000, guid: 3b7c928f27a5fb844973621e9fc9b1af, type: 2}
+  _storyDecision:
+    _decisionPrompt: 
+    _textSpeedModifier: 0
+    _calmChoice:
+      _buttonText: 
+      _statRequirement: 0
+      _choiceOutcome:
+        _successText:
+          _pageType: 0
+          _text: ...
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
+        _successExit:
+          _possibleExits: []
+        _failureText:
+          _pageType: 0
+          _text: ...
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
+        _failureExit:
+          _possibleExits: []
+    _tenacityChoice:
+      _buttonText: 
+      _statRequirement: 0
+      _choiceOutcome:
+        _successText:
+          _pageType: 0
+          _text: ...
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
+        _successExit:
+          _possibleExits: []
+        _failureText:
+          _pageType: 0
+          _text: ...
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
+        _failureExit:
+          _possibleExits: []
+    _survivalChoice:
+      _buttonText: 
+      _statRequirement: 0
+      _choiceOutcome:
+        _successText:
+          _pageType: 0
+          _text: ...
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
+        _successExit:
+          _possibleExits: []
+        _failureText:
+          _pageType: 0
+          _text: ...
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
+        _failureExit:
+          _possibleExits: []

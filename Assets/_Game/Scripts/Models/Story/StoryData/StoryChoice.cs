@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [System.Serializable]
-public class StoryDecision
+public class StoryChoice
 {
-    [Header("Story Decision Settings")]
+    public event Action<Choice> ChoicePicked;
+
     [SerializeField] string _decisionPrompt = null;
     public string DecisionPrompt => _decisionPrompt;
 
@@ -15,9 +17,9 @@ public class StoryDecision
     [SerializeField] Choice _calmChoice = null;
     public Choice CalmChoice => _calmChoice;
 
-    [SerializeField] Choice _tenacityChoice = null;
-    public Choice TenacityChoice => _tenacityChoice;
-
     [SerializeField] Choice _survivalChoice = null;
     public Choice SurvivalChoice => _survivalChoice;
+
+    [SerializeField] Choice _tenacityChoice = null;
+    public Choice TenacityChoice => _tenacityChoice;
 }

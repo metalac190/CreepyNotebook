@@ -5,12 +5,12 @@ using TMPro;
 
 public class StoryUIManager : MonoBehaviour
 {
-    [SerializeField] StoryContentController _storyTextController = null;
-    public StoryContentController StoryTextController => _storyTextController;
+    [SerializeField] HUDController _HUDController = null;
+    public HUDController HUDController => _HUDController;
+
+    [SerializeField] StoryPageController _storyPageController = null;
+    public StoryPageController StoryPageController => _storyPageController;
 
     [SerializeField] StoryDecisionController _storyDecisionController = null;
     public StoryDecisionController StoryDecisionController => _storyDecisionController;
-
-    [SerializeField] HUDController _HUDController = null;
-    public HUDController HUDController => _HUDController;
 }
