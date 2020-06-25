@@ -8,7 +8,7 @@ public class HUDView : MonoBehaviour, IDisplayable
     [SerializeField] Canvas _HUDCanvas = null;
     [SerializeField] TextMeshProUGUI _promptTextUI = null;
 
-    public void Show()
+    public void Reveal()
     {
         _HUDCanvas.gameObject.SetActive(true);
     }

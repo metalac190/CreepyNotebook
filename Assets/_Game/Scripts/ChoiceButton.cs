@@ -9,6 +9,7 @@ using System;
 [RequireComponent(typeof(Button))]
 public class ChoiceButton : MonoBehaviour, IDisplayable
 {
+    public event Action<Choice> ChoiceClicked;
     public event Action EnterCompleted;
     public event Action ExitCompleted;
 
@@ -27,6 +28,8 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
     CanvasGroup _canvasGroup = null;
     Coroutine _animationCoroutine = null;
 
+    public Choice Choice { get; private set; }
+
     private void Awake()
     {
         // get references
@@ -38,11 +41,10 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         _imageUI.raycastTarget = false;
     }
 
-    public void SetupButton(Action actionOnClick)
+    public void SetChoice(Choice choice)
     {
-        // make sure we've disposed of our previous listeners
-        _buttonUI.onClick.RemoveAllListeners();
-        _buttonUI.onClick.AddListener(delegate { actionOnClick.Invoke(); } );
+        Choice = choice;
+        Display(choice.ButtonText);
     }
 
     public void Display(string buttonText)
@@ -53,6 +55,36 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
     public void Clear()
     {
         _textView.text = string.Empty;
+        Choice = null;
+    }
+
+    public void CompleteReveal()
+    {
+        if (_animationCoroutine != null)
+            StopCoroutine(_animationCoroutine);
+        // ensure we hit our final value
+        _canvasGroup.alpha = 1;
+        transform.localPosition = new Vector2(_startXPos, transform.localPosition.y);
+        // only allow button to be clickable if animation has finished
+        _imageUI.raycastTarget = true;
+
+        EnterCompleted?.Invoke();
+    }
+
+    public void Reveal()
+    {
+        Debug.Log("Reveal Button Animation");
+        if (_animationCoroutine != null)
+            StopCoroutine(_animationCoroutine);
+        _animationCoroutine = StartCoroutine(AnimateEnter(_startDelayInSeconds, _showSpeedInSeconds));
+    }
+
+    public void Hide()
+    {
+        // if we're currently animating, kill it early to start our new one
+        if (_animationCoroutine != null)
+            StopCoroutine(_animationCoroutine);
+        _animationCoroutine = StartCoroutine(AnimateExit(_startDelayInSeconds, _hideSpeedInSeconds));
     }
 
     IEnumerator AnimateEnter(float startDelay, float showSpeedInSeconds)
@@ -81,6 +113,8 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         transform.localPosition = new Vector2(animEndXPos, transform.localPosition.y);
         // only allow button to be clickable if animation has finished
         _imageUI.raycastTarget = true;
+
+        EnterCompleted?.Invoke();
     }
 
     IEnumerator AnimateExit(float startDelay, float hideSpeedInSeconds)
@@ -100,22 +134,7 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         // ensure we hit our final value
         _canvasGroup.alpha = 0;
 
-        gameObject.SetActive(false);
-    }
-
-    public void Show()
-    {
-        if (_animationCoroutine != null)
-            StopCoroutine(_animationCoroutine);
-        _animationCoroutine = StartCoroutine(AnimateEnter(_startDelayInSeconds, _showSpeedInSeconds));
-    }
-
-    public void Hide()
-    {
-        // if we're currently animating, kill it early to start our new one
-        if (_animationCoroutine != null)
-            StopCoroutine(_animationCoroutine);
-        _animationCoroutine = StartCoroutine(AnimateExit(_startDelayInSeconds, _hideSpeedInSeconds));
+        ExitCompleted?.Invoke();
     }
 }
 

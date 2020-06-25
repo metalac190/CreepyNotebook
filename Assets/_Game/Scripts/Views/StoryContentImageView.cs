@@ -27,8 +27,8 @@ public class StoryContentImageView : MonoBehaviour
 
     public void Display(StoryPage storyImage)
     {
-        _imageUI.sprite = null;
-        _imageTextUI.text = string.Empty;
+        _imageUI.sprite = storyImage.Graphic;
+        _imageTextUI.text = storyImage.Text;
     }
 
     public void Show()

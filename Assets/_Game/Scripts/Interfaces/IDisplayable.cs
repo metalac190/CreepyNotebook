@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IDisplayable
 {
-    void Show();
+    void Reveal();
     void Hide();
 }

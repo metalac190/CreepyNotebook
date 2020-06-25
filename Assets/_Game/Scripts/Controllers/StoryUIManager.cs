@@ -11,6 +11,6 @@ public class StoryUIManager : MonoBehaviour
     [SerializeField] StoryPageController _storyPageController = null;
     public StoryPageController StoryPageController => _storyPageController;
 
-    [SerializeField] StoryDecisionController _storyDecisionController = null;
-    public StoryDecisionController StoryDecisionController => _storyDecisionController;
+    [SerializeField] StoryChoiceController _storyDecisionController = null;
+    public StoryChoiceController StoryDecisionController => _storyDecisionController;
 }

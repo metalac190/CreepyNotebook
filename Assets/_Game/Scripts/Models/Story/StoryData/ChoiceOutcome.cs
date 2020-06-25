@@ -5,18 +5,18 @@ using UnityEngine;
 [System.Serializable]
 public class ChoiceOutcome
 {
-    public StoryPage[] ChosenStoryPages => _wasSuccessful ? _successText : _failureText;
-    public StoryExit[] ChosenStoryExits => _wasSuccessful ? _successExits : _failureExit;
+    public StoryPage[] ChosenStoryPages => _wasSuccessful ? _successStory : _failureStory;
+    public StoryExit ChosenStoryExits => _wasSuccessful ? _successExits : _failureExit;
 
     [SerializeField] int _difficulty = 0;
 
     [Header("Success")]
-    [SerializeField] StoryPage[] _successText = null;
-    [SerializeField] StoryExit[] _successExits = null;
+    [SerializeField] StoryPage[] _successStory = null;
+    [SerializeField] StoryExit _successExits = null;
 
     [Header("Failure")]
-    [SerializeField] StoryPage[] _failureText = null;
-    [SerializeField] StoryExit[] _failureExit = null;
+    [SerializeField] StoryPage[] _failureStory = null;
+    [SerializeField] StoryExit _failureExit = null;
 
     bool _wasSuccessful = false;
 

@@ -5,5 +5,5 @@ using UnityEngine;
 public enum ExitType
 {
     Story,
-    Decision
+    Choice
 }

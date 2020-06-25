@@ -12,12 +12,14 @@ public class StoryTransitionState : IState
     {
         _stateMachine = stateMachine;
         _stats = stats;
+        //Debug.Log("Settings stats. Max Health " + _stats.MaxHealth);
         _inventory = inventory;
     }
 
     public void Enter()
     {
         Debug.Log("TRANSITION STATE");
+
     }
 
     public void Exit()
@@ -37,6 +39,7 @@ public class StoryTransitionState : IState
         _stateMachine.CurrentStoryEvent = _stateMachine.NextStoryEvent;
         // clear the exit, for testing
         _stateMachine.NextStoryEvent = null;
+        _stateMachine.ChosenStoryResult = null;
         // transition
         _stateMachine.ChangeState(_stateMachine.PageState);
     }
@@ -49,7 +52,6 @@ public class StoryTransitionState : IState
         {
             _stateMachine.NextStoryEvent = _stateMachine.CurrentStoryEvent
                 .StoryExit.GetExit(_stats, _inventory);
-
             if (_stateMachine.NextStoryEvent == null)
             {
                 Debug.LogError("No exit set on story. Cannot proceed: " + _stateMachine.CurrentStoryEvent.name);

@@ -25,6 +25,6 @@ public class StoryEventData : ScriptableObject
     [SerializeField] StoryExit _storyExit = null;
     public StoryExit StoryExit => _storyExit;
 
-    [SerializeField] StoryChoice _storyDecision = null;
-    public StoryChoice StoryDecision => _storyDecision;
+    [SerializeField] StoryChoice _storyChoice = null;
+    public StoryChoice StoryChoice => _storyChoice;
 }

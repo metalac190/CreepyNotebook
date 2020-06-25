@@ -6,9 +6,9 @@ public class StoryChooseState : IState
 {
     private StorySM _stateMachine = null;
     private InputManager _input = null;
-    private StoryDecisionController _decisionController = null;
+    private StoryChoiceController _decisionController = null;
 
-    public StoryChooseState(StorySM stateMachine, InputManager input, StoryDecisionController decisionController)
+    public StoryChooseState(StorySM stateMachine, InputManager input, StoryChoiceController decisionController)
     {
         _stateMachine = stateMachine;
         _input = input;
@@ -20,6 +20,26 @@ public class StoryChooseState : IState
         Debug.Log("CONTENT IDLE");
         _input.Clicked += OnClicked;
         _decisionController.ChoiceMade += OnChoiceMade;
+        // display
+        DisplayStoryChoice();
+    }
+
+    private void DisplayStoryChoice()
+    {
+        StoryChoice newStoryChoice = _stateMachine.CurrentStoryEvent.StoryChoice;
+        if (newStoryChoice != null)
+        {
+            _decisionController.Begin(newStoryChoice);
+        }
+    }
+
+    void HideStoryChoice()
+    {
+        StoryChoice newStoryChoice = _stateMachine.CurrentStoryEvent.StoryChoice;
+        if (newStoryChoice != null)
+        {
+            _decisionController.Hide();
+        }
     }
 
     public void Exit()
@@ -27,6 +47,8 @@ public class StoryChooseState : IState
         //TODO STOP listening for button clicks
         _input.Clicked -= OnClicked;
         _decisionController.ChoiceMade -= OnChoiceMade;
+        // Hide display
+        HideStoryChoice();
     }
 
     public void Tick()
@@ -36,11 +58,12 @@ public class StoryChooseState : IState
 
     void OnClicked()
     {
-        //
+        _decisionController.Progress();
     }
 
     void OnChoiceMade(Choice choice)
     {
         //TODO resolve the choice
+        _stateMachine.ChosenStoryResult = choice.ChoiceOutcome.ChosenStoryPages;
     }
 }
