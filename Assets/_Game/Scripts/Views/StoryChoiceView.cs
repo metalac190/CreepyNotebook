@@ -6,31 +6,46 @@ using System;
 
 public class StoryChoiceView : MonoBehaviour
 {
-    public event Action RevealCompleted;
+    public event Action TextRevealStarted;
+    public event Action TextRevealCompleted;
+    public event Action ButtonRevealCompleted;
 
     [Header("Decision Canvas")]
     [SerializeField] Canvas _choiceCanvas = null;
     [SerializeField] TextMeshProUGUI _textUI = null;
-    [SerializeField] RectTransform _choicePanel = null;
+
+    [Header("Text Animation")]
+    [SerializeField] RevealText _textAnimation = null;
 
     [Header("Choice Buttons")]
     [SerializeField] ChoiceButton _calmButton = null;
     [SerializeField] ChoiceButton _survivalButton = null;
     [SerializeField] ChoiceButton _tenacityButton = null;
 
+    [Header("Panel Animation")]
+    [SerializeField] float _delayBetweenShowButtons = .15f;
+    [SerializeField] float _delayBetweenHideButtons = .1f;
+
     bool _calmButtonRevealed = false;
     bool _survivalButtonRevealed = false;
     bool _tenacityButtonRevealed = false;
 
+    const float DELAY_BETWEEN_CHARACTERS = .03f;    // base delay amount
+    float _textDelayModifier = 0;   // modified by particular story content
+    public float TextRevealDelay => DELAY_BETWEEN_CHARACTERS + _textDelayModifier;  // combine it for the total
+
+    Coroutine _viewAnimatorRoutine = null;
+
     private void Awake()
     {
         // ensure that if designer left canvas on that it's handled
-        _choiceCanvas.gameObject.SetActive(false);
-        _choicePanel.gameObject.SetActive(false);
+        DisableCanvas();
     }
 
     private void OnEnable()
     {
+        _textAnimation.RevealCompleted += OnTextRevealCompleted;
+
         _calmButton.EnterCompleted += OnCalmRevealCompleted;
         _survivalButton.EnterCompleted += OnSurvivalRevealCompleted;
         _tenacityButton.EnterCompleted += OnTenacityRevealCompleted;
@@ -38,6 +53,8 @@ public class StoryChoiceView : MonoBehaviour
 
     private void OnDisable()
     {
+        _textAnimation.RevealCompleted -= OnTextRevealCompleted;
+
         _calmButton.EnterCompleted -= OnCalmRevealCompleted;
         _survivalButton.EnterCompleted -= OnSurvivalRevealCompleted;
         _tenacityButton.EnterCompleted -= OnTenacityRevealCompleted;
@@ -45,40 +62,26 @@ public class StoryChoiceView : MonoBehaviour
 
     public void Reveal()
     {
-        //TODO replace with Animation
-        Debug.Log("Enable Buttons");
-        _choiceCanvas.gameObject.SetActive(true);
-        _choicePanel.gameObject.SetActive(true);
-        Debug.Log("Reveal Buttons");
-        // animate buttons
-        _calmButton.Reveal();
-        _survivalButton.Reveal();
-        _tenacityButton.Reveal();
-        // reset button states, to track when all 3 have finished animating
-        ResetButtonRevealStates();
+        EnableCanvas();
+
+        TextRevealStarted?.Invoke();
+        _textAnimation.Reveal(TextRevealDelay);
     }
 
     public void CompleteReveal()
     {
-        Debug.Log("Completed Reveal");
-        //TODO replace with Animation
-        _choiceCanvas.gameObject.SetActive(true);
-        _choicePanel.gameObject.SetActive(true);
-        // animate buttons
-        _calmButton.Reveal();
-        _survivalButton.Reveal();
-        _tenacityButton.Reveal();
-        Debug.Log("TODO: Complete Animation");
-        RevealCompleted?.Invoke();
+        _textAnimation.CompleteReveal();
     }
 
     public void Display(StoryChoice storyDecision)
     {
         _textUI.text = storyDecision.DecisionPrompt;
+
+        _textDelayModifier = storyDecision.TextSpeedModifier;
         // choices
-        _calmButton.SetChoice(storyDecision.CalmChoice);
-        _survivalButton.SetChoice(storyDecision.SurvivalChoice);
-        _tenacityButton.SetChoice(storyDecision.TenacityChoice);
+        _calmButton.Display(storyDecision.CalmChoice.ButtonText);
+        _survivalButton.Display(storyDecision.SurvivalChoice.ButtonText);
+        _tenacityButton.Display(storyDecision.TenacityChoice.ButtonText);
     }
 
     public void Clear()
@@ -88,17 +91,56 @@ public class StoryChoiceView : MonoBehaviour
         _calmButton.Clear();
         _survivalButton.Clear();
         _tenacityButton.Clear();
+
+        _textDelayModifier = 0;
     }
 
     public void Hide()
     {
-        //TODO replace with Animation
-        _choiceCanvas.gameObject.SetActive(false);
-        _choicePanel.gameObject.SetActive(false);
+        // animate buttons
+        if (_viewAnimatorRoutine != null)
+            StopCoroutine(_viewAnimatorRoutine);
+        _viewAnimatorRoutine = StartCoroutine(ViewHideRoutine());
+    }
+
+    IEnumerator ViewHideRoutine()
+    {
         // animate buttons
         _calmButton.Hide();
+        yield return new WaitForSeconds(_delayBetweenHideButtons);
         _survivalButton.Hide();
+        yield return new WaitForSeconds(_delayBetweenHideButtons);
         _tenacityButton.Hide();
+        yield return new WaitForSeconds(_delayBetweenHideButtons);
+
+        DisableCanvas();
+    }
+
+    void OnTextRevealCompleted()
+    {
+        TextRevealCompleted?.Invoke();
+        RevealButtons();
+    }
+
+    private void RevealButtons()
+    {
+        // animate buttons
+        if (_viewAnimatorRoutine != null)
+            StopCoroutine(_viewAnimatorRoutine);
+        _viewAnimatorRoutine = StartCoroutine(ViewRevealRoutine());
+
+        // reset button states, to track when all 3 have finished animating
+        ResetButtonRevealStates();
+    }
+
+    IEnumerator ViewRevealRoutine()
+    {
+        //TODO panel animation here
+        _calmButton.Reveal();
+        yield return new WaitForSeconds(_delayBetweenShowButtons);
+        _survivalButton.Reveal();
+        yield return new WaitForSeconds(_delayBetweenShowButtons);
+        _tenacityButton.Reveal();
     }
 
     void ResetButtonRevealStates()
@@ -131,7 +173,18 @@ public class StoryChoiceView : MonoBehaviour
     {
         if(_calmButtonRevealed && _survivalButtonRevealed && _tenacityButtonRevealed)
         {
-            RevealCompleted?.Invoke();
+            ButtonRevealCompleted?.Invoke();
         }
+    }
+
+    void EnableCanvas()
+    {
+        _choiceCanvas.gameObject.SetActive(true);
+    }
+
+    void DisableCanvas()
+    {
+        Clear();
+        _choiceCanvas.gameObject.SetActive(false);
     }
 }

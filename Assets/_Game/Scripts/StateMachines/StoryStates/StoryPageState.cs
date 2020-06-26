@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class StoryPageState : IState
 {
@@ -26,19 +27,18 @@ public class StoryPageState : IState
         // subscribe
         _input.Clicked += OnClicked;
         _pageController.OutOfPages += OnOutOfPages;
-        _pageController.CompletedShowAnimation += OnCompletedShowAnimation;
         // begin if we have pages. If not, flag it to exit as soon as it's able
         BeginStoryIfValid();
     }
 
     private void BeginStoryIfValid()
     {
-        StoryPage[] storyPages = _stateMachine.CurrentStoryEvent.StoryPages; ;
-        if (storyPages.Length > 0 && storyPages != null)
+        List<StoryPage> storyPages = _stateMachine.CurrentStoryEvent.StoryPages.ToList();
+        if (storyPages.Count > 0 && storyPages != null)
         {
             // begin story
             _isValidStory = true;
-            _pageController.Begin(_stateMachine.CurrentStoryEvent.StoryPages);
+            _pageController.Begin(storyPages);
         }
         else
         {
@@ -51,7 +51,6 @@ public class StoryPageState : IState
         // unsubscribe
         _input.Clicked -= OnClicked;
         _pageController.OutOfPages -= OnOutOfPages;
-        _pageController.CompletedShowAnimation -= OnCompletedShowAnimation;
         // clear display
         _pageController.HideContent();
         // reset state defaults
@@ -64,7 +63,8 @@ public class StoryPageState : IState
         // finished entering the state before we can exit.
         if(_isValidStory == false)
         {
-            ExitStory();
+            //ExitStory();
+            _stateMachine.ChangeState(_stateMachine.ExitState);
         }
     }
 
@@ -85,14 +85,26 @@ public class StoryPageState : IState
 
     void ExitStory()
     {
-        if (_stateMachine.CurrentStoryEvent.StoryChoice != null &&    // we have a story decision assigned
-            _stateMachine.CurrentStoryEvent.ExitType == ExitType.Choice)     // we've assigned Choice as the exit type
+        if (_stateMachine.CurrentStoryEvent.StoryChoice != null     // we have a story decision assigned
+            && _stateMachine.CurrentStoryEvent.ExitType == ExitType.Choice  // we've assigned Choice as the exit type
+            && _stateMachine.CurrentChoiceOutcome == null)     // we haven't determined an outcome yet
         {
+            Debug.Log("Move to Choice State");
             _stateMachine.ChangeState(_stateMachine.ChooseState);
         }
         else
         {
-            _stateMachine.ChangeState(_stateMachine.TransitionState);
+            // since we cannot enter the same state we're in, just re-initialize
+            DisplayNewStoryPages();
         }
+    }
+
+    private void DisplayNewStoryPages()
+    {
+        Debug.Log("Display more pages");
+        //_stateMachine.ChangeState(_stateMachine.StoryBeginState);
+        _pageController.HideContent();
+        _stateMachine.SetStoryFromExit();
+        BeginStoryIfValid();
     }
 }

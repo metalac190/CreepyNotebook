@@ -12,13 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6798a50f568910046be6daa6e5ff7131, type: 3}
   m_Name: StoryEvent_03A
   m_EditorClassIdentifier: 
-  _name: Alley
+  _name: Garage
   _gate:
     _calmReq: 0
     _survivalReq: 0
     _tenacityReq: 0
     _requiredItemID: 0
-  _storyPages: []
+  _storyPages:
+  - _pageType: 0
+    _text: You find yourself in the garage.
+    _textSpeedModifier: 0
+    _graphic: {fileID: 0}
   _exitType: 0
   _storyExit:
     _possibleExits: []

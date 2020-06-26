@@ -7,7 +7,6 @@ using System;
 [RequireComponent(typeof(StoryContentImageView))]
 public class StoryPageController : MonoBehaviour
 {
-    public event Action CompletedShowAnimation;
     public event Action OutOfPages;
 
     [Header("Prompts")]
@@ -20,8 +19,8 @@ public class StoryPageController : MonoBehaviour
     public StoryPage CurrentStoryPage => _storyPages[_pageProgressionIndex];
 
     int _pageProgressionIndex = 0;
-    StoryPage[] _storyPages;
-    bool _finishedShowAnimation = false;
+    List<StoryPage> _storyPages = new List<StoryPage>();
+    bool _isRevealingText = false;
 
     #region MonoBehaviour
     private void Awake()
@@ -32,24 +31,29 @@ public class StoryPageController : MonoBehaviour
 
     private void OnEnable()
     {
-        _storyTextView.CompletedShowAnimation += OnCompletedShowAnimation;
-        _storyImageView.CompletedShowAnimation += OnCompletedShowAnimation;
+        _storyTextView.RevealAnimationStarted += OnStartedShowAnimation;
+        _storyTextView.RevealAnimationCompleted += OnCompletedShowAnimation;
+        _storyImageView.RevealAnimationStarted += OnStartedShowAnimation;
+        _storyImageView.RevealAnimationCompleted += OnCompletedShowAnimation;
     }
 
     private void OnDisable()
     {
-        
+        _storyTextView.RevealAnimationStarted -= OnStartedShowAnimation;
+        _storyTextView.RevealAnimationCompleted -= OnCompletedShowAnimation;
+        _storyImageView.RevealAnimationStarted -= OnStartedShowAnimation;
+        _storyImageView.RevealAnimationCompleted -= OnCompletedShowAnimation;
     }
     #endregion
 
     #region Public
-    public void Begin(StoryPage[] storyPages)
+    public void Begin(List<StoryPage> storyPages)
     {
         _storyPages = storyPages;
 
         // reset progress state
         _pageProgressionIndex = 0;
-        _finishedShowAnimation = false;
+        _isRevealingText = false;
         // display first page
         RevealContent();
     }
@@ -85,7 +89,7 @@ public class StoryPageController : MonoBehaviour
         // determine which display to hide
         if (CurrentStoryPage.PageType == PageType.Text)
         {
-            HideStoryPage();
+            HideStoryText();
         }
         else if (CurrentStoryPage.PageType == PageType.Image)
         {
@@ -96,19 +100,23 @@ public class StoryPageController : MonoBehaviour
     public void Progress()
     {
         // if we're not finished animating, immediately reveal
-        if (_finishedShowAnimation == false)
+        if (_isRevealingText == true)
         {
+            //Debug.Log("Complete Content Reveal");
             CompleteRevealContent();
         }
         // if we have more pages and are finished Animating, continue
-        else if (IsMorePages())
+        else if (IsMorePages() && !_isRevealingText)
         {
+            //Debug.Log("Progress Next Page");
+            HideContent();
             _pageProgressionIndex++;
             RevealContent();
         }
         // if we don't have any more pages, send the 'out of content' event
-        else if (IsMorePages() == false)
+        else if (IsMorePages() == false && !_isRevealingText)
         {
+            //Debug.Log("Progress Next Story");
             OutOfPages?.Invoke();
         }
     }
@@ -118,16 +126,16 @@ public class StoryPageController : MonoBehaviour
     void RevealStoryText(StoryPage page)
     {
         _storyTextView.Display(page);
-        _storyTextView.Show();
+        _storyTextView.Reveal();
     }
 
     void CompleteRevealStoryText(StoryPage page)
     {
-        _storyTextView.Display(page);
-        _storyTextView.Complete();
+        //_storyTextView.Display(page);
+        _storyTextView.CompleteReveal();
     }
 
-    void HideStoryPage()
+    void HideStoryText()
     {
         _storyTextView.Hide();
     }
@@ -135,13 +143,13 @@ public class StoryPageController : MonoBehaviour
     void RevealStoryImage(StoryPage storyImage)
     {
         _storyImageView.Display(storyImage);
-        _storyImageView.Show();
+        _storyImageView.Reveal();
     }
 
     void CompleteRevealStoryImage(StoryPage page)
     {
         _storyImageView.Display(page);
-        _storyTextView.Complete();
+        _storyImageView.CompleteReveal();
     }
 
     void HideStoryImage()
@@ -152,7 +160,7 @@ public class StoryPageController : MonoBehaviour
     bool IsMorePages()
     {
         // if we can progress our index by 1 and it's still valid, we can progress
-        if (ArrayHelper.IsValidIndex(_pageProgressionIndex + 1, _storyPages.Length))
+        if (ArrayHelper.IsValidIndex(_pageProgressionIndex + 1, _storyPages.Count))
         {
             return true;
         }
@@ -162,10 +170,14 @@ public class StoryPageController : MonoBehaviour
         }
     }
 
+    void OnStartedShowAnimation()
+    {
+        _isRevealingText = true;
+    }
+
     void OnCompletedShowAnimation()
     {
-        _finishedShowAnimation = true;
-        CompletedShowAnimation?.Invoke();
+        _isRevealingText = false;
     }
     #endregion
 }

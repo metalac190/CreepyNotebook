@@ -5,8 +5,8 @@ using UnityEngine;
 public class StoryIntroState : IState
 {
     StorySM _stateMachine = null;
-    Inventory _inventory = null;
-    PlayerStats _stats = null;
+    Inventory _inventory = null;    // may need later for initialization
+    PlayerStats _stats = null;      // may need later for initialization
     StoryEventData _startingStory = null;
 
     public StoryIntroState(StorySM stateMachine, PlayerStats stats, Inventory inventory, StoryEventData startingStory)
@@ -20,7 +20,6 @@ public class StoryIntroState : IState
     public void Enter()
     {
         Debug.Log("INTRO");
-        _stateMachine.CurrentStoryEvent = _startingStory;
     }
 
     public void Exit()
@@ -30,7 +29,14 @@ public class StoryIntroState : IState
 
     public void Tick()
     {
+        StartFirstStory();
+
+    }
+
+    void StartFirstStory()
+    {
         // change on first update tick
+        _stateMachine.SetStory(_startingStory);
         _stateMachine.ChangeState(_stateMachine.PageState);
     }
 }

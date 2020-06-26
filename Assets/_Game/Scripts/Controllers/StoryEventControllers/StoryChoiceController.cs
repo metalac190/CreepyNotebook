@@ -19,7 +19,7 @@ public class StoryChoiceController : MonoBehaviour
 
     StoryChoiceView _decisionView = null;
 
-    bool _finishedShowAnimation = false;
+    bool _isRevealingText = false;
 
     #region MonoBehaviour
     private void Awake()
@@ -30,7 +30,8 @@ public class StoryChoiceController : MonoBehaviour
     private void OnEnable()
     {
         // listen for when Intro Animation has completed
-        _decisionView.RevealCompleted += OnShowCompleted;
+        _decisionView.TextRevealStarted += OnRevealTextStarted;
+        _decisionView.TextRevealCompleted += OnRevealTextCompleted;
         // listen for button choices
         _calmChoice.ChoiceClicked += OnChoiceClicked;
         _survivalChoice.ChoiceClicked += OnChoiceClicked;
@@ -39,7 +40,8 @@ public class StoryChoiceController : MonoBehaviour
 
     private void OnDisable()
     {
-        _decisionView.RevealCompleted -= OnShowCompleted;
+        _decisionView.TextRevealStarted -= OnRevealTextStarted;
+        _decisionView.TextRevealCompleted -= OnRevealTextCompleted;
         
         _calmChoice.ChoiceClicked -= OnChoiceClicked;
         _survivalChoice.ChoiceClicked -= OnChoiceClicked;
@@ -51,18 +53,21 @@ public class StoryChoiceController : MonoBehaviour
     public void Begin(StoryChoice storyDecision)
     {
         // progression state
-        _finishedShowAnimation = false;
+        _isRevealingText = false;
         // set up choice buttons
-
+        _calmChoice.SetChoice(storyDecision.CalmChoice);
+        _survivalChoice.SetChoice(storyDecision.SurvivalChoice);
+        _tenacityChoice.SetChoice(storyDecision.TenacityChoice);
         // display it
         _decisionView.Display(storyDecision);
+
         _decisionView.Reveal();
 
     }
     // on progress attempt, auto finish animation
     public void Progress()
     {
-        if(_finishedShowAnimation == false)
+        if(_isRevealingText == true)
         {
             _decisionView.CompleteReveal();
         }
@@ -81,13 +86,19 @@ public class StoryChoiceController : MonoBehaviour
     #endregion
 
     #region Callbacks
-    void OnShowCompleted()
+    void OnRevealTextStarted()
     {
-        _finishedShowAnimation = true;
+        _isRevealingText = true;
+    }
+
+    void OnRevealTextCompleted()
+    {
+        _isRevealingText = false;
     }
 
     void OnChoiceClicked(Choice choice)
     {
+        
         ChoiceMade?.Invoke(choice);
     }
     #endregion

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6798a50f568910046be6daa6e5ff7131, type: 3}
   m_Name: StoryEvent_01A
   m_EditorClassIdentifier: 
-  _name: Hallway
+  _name: Driveway
   _gate:
     _calmReq: 0
     _survivalReq: 0
@@ -20,71 +20,65 @@ MonoBehaviour:
     _requiredItemID: 0
   _storyPages:
   - _pageType: 0
-    _text: Hallway Text A
+    _text: 'You almost forgot to take the trash out again.
+
+
+      Walking down the
+      driveway, you notice that none of the other trash bins have been put out. Is
+      this the right day?
+
+
+      As you pull your phone out of your pocket to check,
+      a car drives by casting a long shadow across the driveway.'
     _textSpeedModifier: 0
     _graphic: {fileID: 0}
   - _pageType: 0
-    _text: Hallway Text B
+    _text: 'Well... it''s the right day. I guess everyone else just forgot.
+
+
+      You
+      roll the trash bin down to the end of the driveway, but for some reason you
+      get an uneasy feeling. Silence... there are no other sounds. It feels like
+      being in a small closet, but the size of a neighborhood.'
     _textSpeedModifier: 0
     _graphic: {fileID: 0}
   _exitType: 0
   _storyExit:
     _possibleExits:
     - {fileID: 11400000, guid: 3b7c928f27a5fb844973621e9fc9b1af, type: 2}
-  _storyDecision:
+  _storyChoice:
     _decisionPrompt: 
     _textSpeedModifier: 0
     _calmChoice:
       _buttonText: 
       _statRequirement: 0
       _choiceOutcome:
-        _successText:
-          _pageType: 0
-          _text: ...
-          _textSpeedModifier: 0
-          _graphic: {fileID: 0}
-        _successExit:
+        _difficulty: 0
+        _successStory: []
+        _successExits:
           _possibleExits: []
-        _failureText:
-          _pageType: 0
-          _text: ...
-          _textSpeedModifier: 0
-          _graphic: {fileID: 0}
-        _failureExit:
-          _possibleExits: []
-    _tenacityChoice:
-      _buttonText: 
-      _statRequirement: 0
-      _choiceOutcome:
-        _successText:
-          _pageType: 0
-          _text: ...
-          _textSpeedModifier: 0
-          _graphic: {fileID: 0}
-        _successExit:
-          _possibleExits: []
-        _failureText:
-          _pageType: 0
-          _text: ...
-          _textSpeedModifier: 0
-          _graphic: {fileID: 0}
+        _failureStory: []
         _failureExit:
           _possibleExits: []
     _survivalChoice:
       _buttonText: 
       _statRequirement: 0
       _choiceOutcome:
-        _successText:
-          _pageType: 0
-          _text: ...
-          _textSpeedModifier: 0
-          _graphic: {fileID: 0}
-        _successExit:
+        _difficulty: 0
+        _successStory: []
+        _successExits:
           _possibleExits: []
-        _failureText:
-          _pageType: 0
-          _text: ...
-          _textSpeedModifier: 0
-          _graphic: {fileID: 0}
+        _failureStory: []
+        _failureExit:
+          _possibleExits: []
+    _tenacityChoice:
+      _buttonText: 
+      _statRequirement: 0
+      _choiceOutcome:
+        _difficulty: 0
+        _successStory: []
+        _successExits:
+          _possibleExits: []
+        _failureStory: []
         _failureExit:
           _possibleExits: []

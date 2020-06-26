@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class StoryChooseState : IState
 {
@@ -26,6 +27,7 @@ public class StoryChooseState : IState
 
     private void DisplayStoryChoice()
     {
+        Debug.Log("Display story choice");
         StoryChoice newStoryChoice = _stateMachine.CurrentStoryEvent.StoryChoice;
         if (newStoryChoice != null)
         {
@@ -63,7 +65,14 @@ public class StoryChooseState : IState
 
     void OnChoiceMade(Choice choice)
     {
-        //TODO resolve the choice
-        _stateMachine.ChosenStoryResult = choice.ChoiceOutcome.ChosenStoryPages;
+        Debug.Log("Choice made: " + choice.ButtonText);
+
+        _stateMachine.SetChoiceOutcome(choice.ChoiceOutcome);
+        //_stateMachine.SetStoryPages(choice.ChoiceOutcome.ChosenStoryPages);
+
+        _stateMachine.ChangeState(_stateMachine.ChosenPagesState);
+
+        //_stateMachine.SetStoryPages(choice.ChoiceOutcome.ChosenStoryPages.ToList());
+        //_stateMachine.ChangeState(_stateMachine.PageState);
     }
 }

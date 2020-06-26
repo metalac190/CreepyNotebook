@@ -20,7 +20,7 @@ MonoBehaviour:
     _requiredItemID: 0
   _storyPages:
   - _pageType: 1
-    _text: A dark street looms before you.
+    _text: Looking down the driveway, a dark street looms before you.
     _textSpeedModifier: 0
     _graphic: {fileID: 21300000, guid: d7b82d303c6a25d43b91e267a028c04b, type: 3}
   _exitType: 1
@@ -34,31 +34,68 @@ MonoBehaviour:
       _statRequirement: 0
       _choiceOutcome:
         _difficulty: 0
-        _successStory: []
+        _successStory:
+        - _pageType: 0
+          _text: Slowly backing away, you take in your surroundings. A small cat
+            darts across the road.
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
         _successExits:
-          _possibleExits: []
-        _failureStory: []
+          _possibleExits:
+          - {fileID: 11400000, guid: c1615bf24ef18dd44b2b725c036cde4e, type: 2}
+        _failureStory:
+        - _pageType: 0
+          _text: You step backwards onto uneven ground and hit the pavement. As your
+            vision swirls you hear sirens in the distnace...
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
         _failureExit:
-          _possibleExits: []
+          _possibleExits:
+          - {fileID: 11400000, guid: c1615bf24ef18dd44b2b725c036cde4e, type: 2}
     _survivalChoice:
       _buttonText: Sprint towards the lit driveway
       _statRequirement: 0
       _choiceOutcome:
         _difficulty: 0
-        _successStory: []
+        _successStory:
+        - _pageType: 0
+          _text: You make a mad dash towards the driveway, and into the safety of
+            the porch light. The sound seems to have gone away, which doesn't make
+            you feel much better.
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
         _successExits:
-          _possibleExits: []
-        _failureStory: []
+          _possibleExits:
+          - {fileID: 11400000, guid: c1615bf24ef18dd44b2b725c036cde4e, type: 2}
+        _failureStory:
+        - _pageType: 0
+          _text: As soon as you move a small, black shape darts towards your feet.
+            Without any time to respond, you trip nose-first over a startled cat.
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
         _failureExit:
-          _possibleExits: []
+          _possibleExits:
+          - {fileID: 11400000, guid: c1615bf24ef18dd44b2b725c036cde4e, type: 2}
     _tenacityChoice:
       _buttonText: Cautiously approach the sound
       _statRequirement: 0
       _choiceOutcome:
         _difficulty: 0
-        _successStory: []
+        _successStory:
+        - _pageType: 0
+          _text: Briefly, you see a cat hold your gaze before it scurries into the
+            night.
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
         _successExits:
-          _possibleExits: []
-        _failureStory: []
+          _possibleExits:
+          - {fileID: 11400000, guid: c1615bf24ef18dd44b2b725c036cde4e, type: 2}
+        _failureStory:
+        - _pageType: 0
+          _text: Nothing lies before you except an inky blackness. The longer your
+            stare into the shadows, the more the silence unsettles you...
+          _textSpeedModifier: 0
+          _graphic: {fileID: 0}
         _failureExit:
-          _possibleExits: []
+          _possibleExits:
+          - {fileID: 11400000, guid: c1615bf24ef18dd44b2b725c036cde4e, type: 2}

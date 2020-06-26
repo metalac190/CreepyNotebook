@@ -17,7 +17,7 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
     public string Text => _textView.text;
 
     [Header("Animation Settings")]
-    [SerializeField] float xAnimOffset = 100f;
+    [SerializeField] float _xAnimOffset = 100f;
     [SerializeField] float _startDelayInSeconds = .2f;
     [SerializeField] float _showSpeedInSeconds = .2f;
     [SerializeField] float _hideSpeedInSeconds = .2f;
@@ -39,12 +39,23 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         // set field defaults
         _startXPos = transform.localPosition.x;
         _imageUI.raycastTarget = false;
+        // clear by default
+        Clear();
+    }
+
+    void OnEnable()
+    {
+        _buttonUI.onClick.AddListener(OnButtonClicked);
+    }
+
+    void OnDisable()
+    {
+        _buttonUI.onClick.RemoveListener(OnButtonClicked);
     }
 
     public void SetChoice(Choice choice)
     {
         Choice = choice;
-        Display(choice.ButtonText);
     }
 
     public void Display(string buttonText)
@@ -56,6 +67,8 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
     {
         _textView.text = string.Empty;
         Choice = null;
+        _canvasGroup.alpha = 0;
+        _imageUI.raycastTarget = false;
     }
 
     public void CompleteReveal()
@@ -73,7 +86,6 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
 
     public void Reveal()
     {
-        Debug.Log("Reveal Button Animation");
         if (_animationCoroutine != null)
             StopCoroutine(_animationCoroutine);
         _animationCoroutine = StartCoroutine(AnimateEnter(_startDelayInSeconds, _showSpeedInSeconds));
@@ -92,7 +104,7 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         float currentAlpha = 0;
         _canvasGroup.alpha = 0;
         // x offset data
-        float animStartXPos = _startXPos - xAnimOffset;
+        float animStartXPos = _startXPos - _xAnimOffset;
         float animEndXPos = _startXPos;
         float currentXPos = animStartXPos;
 
@@ -135,6 +147,11 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         _canvasGroup.alpha = 0;
 
         ExitCompleted?.Invoke();
+    }
+
+    void OnButtonClicked()
+    {
+        ChoiceClicked?.Invoke(Choice);
     }
 }
 
