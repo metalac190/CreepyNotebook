@@ -55,14 +55,11 @@ public class StoryContentImageView : MonoBehaviour
     public void Reveal()
     {
         _imageCanvas.gameObject.SetActive(true);
-        //RevealAnimationStarted?.Invoke();
-
         _textAnimation.Reveal(TextRevealDelay);
     }
 
     public void CompleteReveal()
     {
-        Debug.Log("Reveal Text immediate!");
         _imageCanvas.gameObject.SetActive(true);
 
         _textAnimation.CompleteReveal();

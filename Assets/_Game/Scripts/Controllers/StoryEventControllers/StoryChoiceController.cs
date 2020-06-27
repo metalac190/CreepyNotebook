@@ -42,7 +42,7 @@ public class StoryChoiceController : MonoBehaviour
     {
         _decisionView.TextRevealStarted -= OnRevealTextStarted;
         _decisionView.TextRevealCompleted -= OnRevealTextCompleted;
-        
+
         _calmChoice.ChoiceClicked -= OnChoiceClicked;
         _survivalChoice.ChoiceClicked -= OnChoiceClicked;
         _tenacityChoice.ChoiceClicked -= OnChoiceClicked;
@@ -60,9 +60,7 @@ public class StoryChoiceController : MonoBehaviour
         _tenacityChoice.SetChoice(storyDecision.TenacityChoice);
         // display it
         _decisionView.Display(storyDecision);
-
         _decisionView.Reveal();
-
     }
     // on progress attempt, auto finish animation
     public void Progress()
@@ -80,8 +78,8 @@ public class StoryChoiceController : MonoBehaviour
 
     public void Hide()
     {
+        Debug.Log("Story Choice Controller: Hide");
         _decisionView.Hide();
-        _decisionView.Clear();
     }
     #endregion
 

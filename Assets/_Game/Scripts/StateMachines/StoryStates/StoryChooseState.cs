@@ -1,8 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
+/// <summary>
+/// This is the Story State that gives the Player multiple options on buttons to choose from.
+/// Once they choose an option, it resolves the story pages and then starts a new story.
+/// </summary>
 public class StoryChooseState : IState
 {
     private StorySM _stateMachine = null;
@@ -18,29 +19,19 @@ public class StoryChooseState : IState
 
     public void Enter()
     {
-        Debug.Log("CONTENT IDLE");
+        Debug.Log("CHOOSE STATE");
         _input.Clicked += OnClicked;
         _decisionController.ChoiceMade += OnChoiceMade;
         // display
-        DisplayStoryChoice();
+        DisplayStoryChoices();
     }
 
-    private void DisplayStoryChoice()
+    private void DisplayStoryChoices()
     {
-        Debug.Log("Display story choice");
         StoryChoice newStoryChoice = _stateMachine.CurrentStoryEvent.StoryChoice;
         if (newStoryChoice != null)
         {
             _decisionController.Begin(newStoryChoice);
-        }
-    }
-
-    void HideStoryChoice()
-    {
-        StoryChoice newStoryChoice = _stateMachine.CurrentStoryEvent.StoryChoice;
-        if (newStoryChoice != null)
-        {
-            _decisionController.Hide();
         }
     }
 
@@ -50,7 +41,7 @@ public class StoryChooseState : IState
         _input.Clicked -= OnClicked;
         _decisionController.ChoiceMade -= OnChoiceMade;
         // Hide display
-        HideStoryChoice();
+        _decisionController.Hide();
     }
 
     public void Tick()
@@ -68,11 +59,6 @@ public class StoryChooseState : IState
         Debug.Log("Choice made: " + choice.ButtonText);
 
         _stateMachine.SetChoiceOutcome(choice.ChoiceOutcome);
-        //_stateMachine.SetStoryPages(choice.ChoiceOutcome.ChosenStoryPages);
-
         _stateMachine.ChangeState(_stateMachine.ChosenPagesState);
-
-        //_stateMachine.SetStoryPages(choice.ChoiceOutcome.ChosenStoryPages.ToList());
-        //_stateMachine.ChangeState(_stateMachine.PageState);
     }
 }

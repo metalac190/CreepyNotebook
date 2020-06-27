@@ -6,9 +6,10 @@ using System;
 
 public class StoryChoiceView : MonoBehaviour
 {
-    public event Action TextRevealStarted;
-    public event Action TextRevealCompleted;
-    public event Action ButtonRevealCompleted;
+    public event Action TextRevealStarted = delegate { };
+    public event Action TextRevealCompleted = delegate { };
+    public event Action ButtonRevealCompleted = delegate { };
+    public event Action ButtonHideCompleted = delegate { };
 
     [Header("Decision Canvas")]
     [SerializeField] Canvas _choiceCanvas = null;
@@ -16,6 +17,7 @@ public class StoryChoiceView : MonoBehaviour
 
     [Header("Text Animation")]
     [SerializeField] RevealText _textAnimation = null;
+    [SerializeField] float _hideSpeedInSeconds = .1f;
 
     [Header("Choice Buttons")]
     [SerializeField] ChoiceButton _calmButton = null;
@@ -25,10 +27,6 @@ public class StoryChoiceView : MonoBehaviour
     [Header("Panel Animation")]
     [SerializeField] float _delayBetweenShowButtons = .15f;
     [SerializeField] float _delayBetweenHideButtons = .1f;
-
-    bool _calmButtonRevealed = false;
-    bool _survivalButtonRevealed = false;
-    bool _tenacityButtonRevealed = false;
 
     const float DELAY_BETWEEN_CHARACTERS = .03f;    // base delay amount
     float _textDelayModifier = 0;   // modified by particular story content
@@ -45,19 +43,31 @@ public class StoryChoiceView : MonoBehaviour
     private void OnEnable()
     {
         _textAnimation.RevealCompleted += OnTextRevealCompleted;
-
-        _calmButton.EnterCompleted += OnCalmRevealCompleted;
-        _survivalButton.EnterCompleted += OnSurvivalRevealCompleted;
-        _tenacityButton.EnterCompleted += OnTenacityRevealCompleted;
+        // intro animation events
+        _calmButton.ShowCompleted += OnButtonRevealCompleted;
+        _survivalButton.ShowCompleted += OnButtonRevealCompleted;
+        _tenacityButton.ShowCompleted += OnButtonRevealCompleted;
+        // exit animation events
+        _calmButton.HideCompleted += OnButtonHideCompleted;
+        _survivalButton.HideCompleted += OnButtonHideCompleted;
+        _tenacityButton.HideCompleted += OnButtonHideCompleted;
+        // canvas
+        ButtonHideCompleted += DisableCanvas;
     }
 
     private void OnDisable()
     {
         _textAnimation.RevealCompleted -= OnTextRevealCompleted;
-
-        _calmButton.EnterCompleted -= OnCalmRevealCompleted;
-        _survivalButton.EnterCompleted -= OnSurvivalRevealCompleted;
-        _tenacityButton.EnterCompleted -= OnTenacityRevealCompleted;
+        // intro animation events
+        _calmButton.ShowCompleted -= OnButtonRevealCompleted;
+        _survivalButton.ShowCompleted -= OnButtonRevealCompleted;
+        _tenacityButton.ShowCompleted -= OnButtonRevealCompleted;
+        // exit animation events
+        _calmButton.HideCompleted -= OnButtonHideCompleted;
+        _survivalButton.HideCompleted -= OnButtonHideCompleted;
+        _tenacityButton.HideCompleted -= OnButtonHideCompleted;
+        // canvas
+        ButtonHideCompleted -= DisableCanvas;
     }
 
     public void Reveal()
@@ -95,27 +105,6 @@ public class StoryChoiceView : MonoBehaviour
         _textDelayModifier = 0;
     }
 
-    public void Hide()
-    {
-        // animate buttons
-        if (_viewAnimatorRoutine != null)
-            StopCoroutine(_viewAnimatorRoutine);
-        _viewAnimatorRoutine = StartCoroutine(ViewHideRoutine());
-    }
-
-    IEnumerator ViewHideRoutine()
-    {
-        // animate buttons
-        _calmButton.Hide();
-        yield return new WaitForSeconds(_delayBetweenHideButtons);
-        _survivalButton.Hide();
-        yield return new WaitForSeconds(_delayBetweenHideButtons);
-        _tenacityButton.Hide();
-        yield return new WaitForSeconds(_delayBetweenHideButtons);
-
-        DisableCanvas();
-    }
-
     void OnTextRevealCompleted()
     {
         TextRevealCompleted?.Invoke();
@@ -128,9 +117,6 @@ public class StoryChoiceView : MonoBehaviour
         if (_viewAnimatorRoutine != null)
             StopCoroutine(_viewAnimatorRoutine);
         _viewAnimatorRoutine = StartCoroutine(ViewRevealRoutine());
-
-        // reset button states, to track when all 3 have finished animating
-        ResetButtonRevealStates();
     }
 
     IEnumerator ViewRevealRoutine()
@@ -143,37 +129,57 @@ public class StoryChoiceView : MonoBehaviour
         _tenacityButton.Reveal();
     }
 
-    void ResetButtonRevealStates()
+    public void Hide()
     {
-        _calmButtonRevealed = false;
-        _survivalButtonRevealed = false;
-        _tenacityButtonRevealed = false;
+        // animate buttons
+        if (_viewAnimatorRoutine != null)
+            StopCoroutine(_viewAnimatorRoutine);
+
+        _viewAnimatorRoutine = StartCoroutine(ViewHideRoutine());
     }
 
-    void OnCalmRevealCompleted()
+    IEnumerator ViewHideRoutine()
     {
-        _calmButtonRevealed = true;
-        CheckAnimationFinished();
+
+        _textAnimation.Hide(_hideSpeedInSeconds);
+        // animate buttons
+        _calmButton.Hide();
+        yield return new WaitForSeconds(_delayBetweenHideButtons);
+        _survivalButton.Hide();
+        yield return new WaitForSeconds(_delayBetweenHideButtons);
+        _tenacityButton.Hide();
+        yield return new WaitForSeconds(_delayBetweenHideButtons);
     }
 
-    void OnSurvivalRevealCompleted()
+    void OnButtonRevealCompleted()
     {
-        _survivalButtonRevealed = true;
-        CheckAnimationFinished();
+        CheckAllButtonsRevealed();
     }
 
-    void OnTenacityRevealCompleted()
+    void OnButtonHideCompleted()
     {
-        _tenacityButtonRevealed = true;
-        CheckAnimationFinished();
+        CheckAllButtonsHidden();
     }
 
-    // if all 3 buttons are revealed, send out a notification
-    void CheckAnimationFinished()
+    void CheckAllButtonsRevealed()
     {
-        if(_calmButtonRevealed && _survivalButtonRevealed && _tenacityButtonRevealed)
+        // if all 3 buttons are revealed, send out a notification
+        if (_calmButton.IsRevealed 
+            && _survivalButton.IsRevealed 
+            && _tenacityButton.IsRevealed)
         {
             ButtonRevealCompleted?.Invoke();
+        }
+    }
+
+    void CheckAllButtonsHidden()
+    {
+        // if all 3 buttons are hidden, send notification
+        if (_calmButton.IsRevealed == false
+            && _survivalButton.IsRevealed == false
+            && _tenacityButton.IsRevealed == false)
+        {
+            ButtonHideCompleted?.Invoke();
         }
     }
 

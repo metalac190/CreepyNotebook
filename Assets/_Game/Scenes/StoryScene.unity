@@ -298,6 +298,21 @@ PrefabInstance:
       propertyPath: _textView
       value: 
       objectReference: {fileID: 79195722}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _hideSpeedInSeconds
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _showSpeedInSeconds
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _startDelayInSeconds
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4d78efe75047c641ad81963801ca532, type: 3}
 --- !u!224 &79195721 stripped
@@ -795,6 +810,21 @@ PrefabInstance:
       propertyPath: _textView
       value: 
       objectReference: {fileID: 529490993}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _hideSpeedInSeconds
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _startDelayInSeconds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _showSpeedInSeconds
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4d78efe75047c641ad81963801ca532, type: 3}
 --- !u!224 &529490992 stripped
@@ -1364,10 +1394,12 @@ MonoBehaviour:
   _choiceCanvas: {fileID: 1374551223}
   _textUI: {fileID: 1691126551}
   _textAnimation: {fileID: 1691126552}
+  _hideSpeedInSeconds: 0.1
   _calmButton: {fileID: 740455226}
   _survivalButton: {fileID: 241290100}
   _tenacityButton: {fileID: 331133933}
-  _delayBetweenButtons: 0.15
+  _delayBetweenShowButtons: 0.2
+  _delayBetweenHideButtons: 0.1
 --- !u!114 &992002534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2589,6 +2621,21 @@ PrefabInstance:
       propertyPath: _textView
       value: 
       objectReference: {fileID: 1961696295}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _hideSpeedInSeconds
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _startDelayInSeconds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7427504035977384380, guid: c4d78efe75047c641ad81963801ca532,
+        type: 3}
+      propertyPath: _showSpeedInSeconds
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4d78efe75047c641ad81963801ca532, type: 3}
 --- !u!224 &1961696294 stripped

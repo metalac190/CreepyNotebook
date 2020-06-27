@@ -9,11 +9,13 @@ public class RevealText : MonoBehaviour
 {
     public event Action RevealStarted = delegate { };
     public event Action RevealCompleted = delegate { };
+    public event Action HideStarted = delegate { };
+    public event Action HideCompleted = delegate { };
 
     bool _isPaused = false;
 
     TextMeshProUGUI _textUI = null;
-    Coroutine _revealRoutine = null;
+    Coroutine _animationRoutine = null;
 
     private void Awake()
     {
@@ -24,19 +26,28 @@ public class RevealText : MonoBehaviour
     {
         RevealStarted?.Invoke();
 
-        if (_revealRoutine != null)
-            StopCoroutine(_revealRoutine);
-        _revealRoutine = StartCoroutine(AnimateTextCoroutine(delayBetweenCharacters));
+        if (_animationRoutine != null)
+            StopCoroutine(_animationRoutine);
+        _animationRoutine = StartCoroutine(RevealRoutine(delayBetweenCharacters));
     }
 
     public void CompleteReveal()
     {
-        if (_revealRoutine != null)
-            StopCoroutine(_revealRoutine);
+        if (_animationRoutine != null)
+            StopCoroutine(_animationRoutine);
         // make all characters visible
         _textUI.maxVisibleCharacters = _textUI.textInfo.characterCount;
 
         RevealCompleted?.Invoke();
+    }
+
+    public void Hide(float hideSpeedInSeconds)
+    {
+        HideStarted?.Invoke();
+
+        if (_animationRoutine != null)
+            StopCoroutine(_animationRoutine);
+        _animationRoutine = StartCoroutine(HideRoutine(hideSpeedInSeconds));
     }
 
     public void PauseText(bool shouldPause)
@@ -44,10 +55,11 @@ public class RevealText : MonoBehaviour
         _isPaused = shouldPause;
     }
 
-    IEnumerator AnimateTextCoroutine(float delayBetweenCharacters)
+    IEnumerator RevealRoutine(float delayBetweenCharacters)
     {
         _textUI.ForceMeshUpdate();
 
+        _textUI.alpha = 1;
         int totalVisibleCharacters = _textUI.textInfo.characterCount;
         int counter = 0;
 
@@ -61,6 +73,24 @@ public class RevealText : MonoBehaviour
         }
 
         RevealCompleted?.Invoke();
+    }
+
+    IEnumerator HideRoutine(float hideSpeedInSeconds)
+    {
+        _textUI.ForceMeshUpdate();
+
+        float currentAlpha = 1;
+
+        for (float t = 0f; t < 1.0f; t += Time.deltaTime / hideSpeedInSeconds)
+        {
+            // opacity animate
+            currentAlpha = Mathf.Lerp(1, 0, t);
+            _textUI.alpha = currentAlpha;
+            yield return null;
+        }
+        _textUI.alpha = 0;
+
+        HideCompleted?.Invoke();
     }
 }
 

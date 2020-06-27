@@ -89,7 +89,6 @@ public class StoryPageState : IState
             && _stateMachine.CurrentStoryEvent.ExitType == ExitType.Choice  // we've assigned Choice as the exit type
             && _stateMachine.CurrentChoiceOutcome == null)     // we haven't determined an outcome yet
         {
-            Debug.Log("Move to Choice State");
             _stateMachine.ChangeState(_stateMachine.ChooseState);
         }
         else
@@ -101,8 +100,6 @@ public class StoryPageState : IState
 
     private void DisplayNewStoryPages()
     {
-        Debug.Log("Display more pages");
-        //_stateMachine.ChangeState(_stateMachine.StoryBeginState);
         _pageController.HideContent();
         _stateMachine.SetStoryFromExit();
         BeginStoryIfValid();

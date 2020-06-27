@@ -10,8 +10,8 @@ using System;
 public class ChoiceButton : MonoBehaviour, IDisplayable
 {
     public event Action<Choice> ChoiceClicked;
-    public event Action EnterCompleted;
-    public event Action ExitCompleted;
+    public event Action ShowCompleted;
+    public event Action HideCompleted;
 
     [SerializeField] TextMeshProUGUI _textView = null;
     public string Text => _textView.text;
@@ -20,6 +20,7 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
     [SerializeField] float _xAnimOffset = 100f;
     [SerializeField] float _startDelayInSeconds = .2f;
     [SerializeField] float _showSpeedInSeconds = .2f;
+    [SerializeField] float _hideDelayInSeconds = .1f;
     [SerializeField] float _hideSpeedInSeconds = .2f;
 
     float _startXPos = 0;
@@ -29,6 +30,7 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
     Coroutine _animationCoroutine = null;
 
     public Choice Choice { get; private set; }
+    public bool IsRevealed { get; private set; } = false;
 
     private void Awake()
     {
@@ -81,14 +83,15 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         // only allow button to be clickable if animation has finished
         _imageUI.raycastTarget = true;
 
-        EnterCompleted?.Invoke();
+        IsRevealed = true;
+        ShowCompleted?.Invoke();
     }
 
     public void Reveal()
     {
         if (_animationCoroutine != null)
             StopCoroutine(_animationCoroutine);
-        _animationCoroutine = StartCoroutine(AnimateEnter(_startDelayInSeconds, _showSpeedInSeconds));
+        _animationCoroutine = StartCoroutine(AnimateRevealRoutine(_startDelayInSeconds, _showSpeedInSeconds));
     }
 
     public void Hide()
@@ -96,11 +99,14 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         // if we're currently animating, kill it early to start our new one
         if (_animationCoroutine != null)
             StopCoroutine(_animationCoroutine);
-        _animationCoroutine = StartCoroutine(AnimateExit(_startDelayInSeconds, _hideSpeedInSeconds));
+        _animationCoroutine = StartCoroutine(AnimateHideRoutine(_hideDelayInSeconds, _hideSpeedInSeconds));
     }
 
-    IEnumerator AnimateEnter(float startDelay, float showSpeedInSeconds)
+    IEnumerator AnimateRevealRoutine(float startDelay, float showSpeedInSeconds)
     {
+        // flag button state to be revealed, at first
+        IsRevealed = false;
+
         float currentAlpha = 0;
         _canvasGroup.alpha = 0;
         // x offset data
@@ -125,28 +131,35 @@ public class ChoiceButton : MonoBehaviour, IDisplayable
         transform.localPosition = new Vector2(animEndXPos, transform.localPosition.y);
         // only allow button to be clickable if animation has finished
         _imageUI.raycastTarget = true;
+        // set reveal state, now that we're completed
+        IsRevealed = true;
 
-        EnterCompleted?.Invoke();
+        ShowCompleted?.Invoke();
     }
 
-    IEnumerator AnimateExit(float startDelay, float hideSpeedInSeconds)
+    IEnumerator AnimateHideRoutine(float startDelay, float hideSpeedInSeconds)
     {
+
+        IsRevealed = true;
+
         float currentAlpha = 1;
         _canvasGroup.alpha = 1;
         _imageUI.raycastTarget = false;
 
-        yield return new WaitForSeconds(startDelay);
+        //yield return new WaitForSeconds(startDelay);
 
         for (float t = 1f; t > 0; t -= Time.deltaTime / hideSpeedInSeconds)
         {
-            currentAlpha = Mathf.Lerp(0, 1f, t);
+            currentAlpha = Mathf.Lerp(0, 1, t);
             _canvasGroup.alpha = currentAlpha;
             yield return null;
         }
         // ensure we hit our final value
         _canvasGroup.alpha = 0;
+        // set reveal state, now that we're completed
+        IsRevealed = false;
 
-        ExitCompleted?.Invoke();
+        HideCompleted?.Invoke();
     }
 
     void OnButtonClicked()
